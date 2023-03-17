@@ -43,6 +43,7 @@ public class SteamOnHashMap {
 
 
         Map<Integer,List<Integer>> updatedMap = new SteamOnHashMap().modifyMap(map);
+
         System.out.println(updatedMap);
 
     }
