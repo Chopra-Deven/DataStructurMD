@@ -7,7 +7,7 @@ class ProducerConsumer {
 
     final int capacity = 5;
 
-    Queue<Integer> wherehouse = new PriorityQueue<>();
+    Queue<Integer> warehouse = new PriorityQueue<>();
 
     public synchronized void produce() {
 
@@ -17,7 +17,7 @@ class ProducerConsumer {
 
             synchronized (this) {
 
-                if (wherehouse.size() >= capacity) {
+                if (warehouse.size() >= capacity) {
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -35,11 +35,11 @@ class ProducerConsumer {
 
                 for (int i = 0; i < capacity; i++) {
 
-                    wherehouse.add(++value);
+                    warehouse.add(++value);
+                    notify();
 
-                    if (wherehouse.size() == capacity) {
+                    if (warehouse.size() == capacity) {
                         System.out.println("Filled");
-                        notify();
                     }
 
                 }
@@ -50,7 +50,7 @@ class ProducerConsumer {
                     throw new RuntimeException(e);
                 }
 
-                System.out.println("Produced : " + wherehouse);
+                System.out.println("Produced : " + warehouse);
                 notify();
 
                 try {
@@ -64,7 +64,6 @@ class ProducerConsumer {
 
         }
 
-
     }
 
     public synchronized void consume() {
@@ -74,7 +73,7 @@ class ProducerConsumer {
 
             synchronized (this) {
 
-                if (wherehouse.size() == 0) {
+                if (warehouse.size() == 0) {
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -90,11 +89,11 @@ class ProducerConsumer {
                         throw new RuntimeException(e);
                     }
 
-                    if (wherehouse.size() == 0) {
+                    if (warehouse.size() == 0) {
                         notify();
                     }
 
-                    System.out.println("Consumed : " + wherehouse.poll());
+                    System.out.println("Consumed : " + warehouse.poll());
 
                 }
 
